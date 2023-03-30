@@ -1,16 +1,17 @@
 import { OpenAIApi, CreateCompletionRequest, CreateChatCompletionRequest } from "openai";
 import { AxiosRequestConfig } from "axios";
-import Client from "axiom-node";
+import Client from "@axiomhq/axiom-node";
 
 export interface WithAxiomOptions {
   token: string;
   dataset: string;
-  excludePrompt: boolean;
+  excludePromptOrMessages: boolean;
   excludeChoices: boolean;
 }
 
 export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi {
   const axiom = new Client({ token: opts?.token });
+  const dataset  = opts?.dataset || process.env.AXIOM_DATASET;
 
   const createCompletion = openai.createCompletion;
   openai.createCompletion = async (request: CreateCompletionRequest, options?: AxiosRequestConfig) => {
@@ -18,14 +19,14 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
     const response = await createCompletion(request);
     const duration = new Date().getTime() - start.getTime();
 
-    if (opts?.excludePrompt) {
+    if (opts?.excludePromptOrMessages) {
       delete request.prompt;
     }
     if (opts?.excludeChoices) {
       delete response.choices;
     }
 
-    await axiom.ingest({ 
+    await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
       duration,
       request, 
@@ -41,17 +42,18 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
     const response = await createChatCompletion(request);
     const duration = new Date().getTime() - start.getTime();
 
-    if (opts?.excludePrompt) {
-      delete request.prompt;
+    const anyRequest = request as any;
+    if (opts?.excludePromptOrMessages) {
+      delete anyRequest.messages;
     }
     if (opts?.excludeChoices) {
       delete response.choices;
     }
 
-    await axiom.ingestEvents(opts?.dataset || process.env.AXIOM_DATASET, { 
+    await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
       duration,
-      request, 
+      request: anyRequest, 
       response 
     });
 
