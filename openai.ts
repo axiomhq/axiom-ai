@@ -3,10 +3,10 @@ import { AxiosRequestConfig } from "axios";
 import Client from "@axiomhq/axiom-node";
 
 export interface WithAxiomOptions {
-  token: string;
-  dataset: string;
-  excludePromptOrMessages: boolean;
-  excludeChoices: boolean;
+  token?: string;
+  dataset?: string;
+  excludePromptOrMessages?: boolean;
+  excludeChoices?: boolean;
 }
 
 export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi {
@@ -17,9 +17,9 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
   openai.createCompletion = async (request: CreateCompletionRequest, options?: AxiosRequestConfig) => {
     const start = new Date();
 
-    const mappedRequest = request as any;
+    const mappedRequest = structuredClone(request) as any;
     if (opts?.excludePromptOrMessages) {
-      delete mappedRequest.messages;
+      delete mappedRequest.prompt;
     }
 
     let response = null;
@@ -38,10 +38,7 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
       throw e;
     }
 
-    if (opts?.excludePromptOrMessages) {
-      delete request.prompt;
-    }
-    const responseData = response.data as any;
+    const responseData = structuredClone(response.data) as any;
     if (opts?.excludeChoices) {
       delete responseData.choices;
     }
@@ -62,7 +59,7 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
   openai.createChatCompletion = async (request: CreateChatCompletionRequest, options?: AxiosRequestConfig) => {
     const start = new Date();
 
-    const mappedRequest = request as any;
+    const mappedRequest = structuredClone(request) as any;
     if (opts?.excludePromptOrMessages) {
       delete mappedRequest.messages;
     }
@@ -83,7 +80,7 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
       throw e;
     }
 
-    const responseData = response.data as any;
+    const responseData = structuredClone(response.data) as any;
     if (opts?.excludeChoices) {
       delete responseData.choices;
     }
