@@ -4,8 +4,11 @@
   "description": "The official package to send events from AI libraries to Axiom.",
   "scripts": {
     "build": "tsc",
+    "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
+  "main": "dist/openai.js",
+  "types": "dist/openai.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/axiomhq/axiom-ai.git"
