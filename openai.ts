@@ -42,7 +42,7 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
     if (opts?.excludeChoices) {
       delete transformedResponse.choices;
     }
-    transformedResponse.created = new Date(responseData.created * 1000).toISOString();
+    transformedResponse.created = new Date(transformedResponse.created * 1000).toISOString();
 
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
@@ -84,7 +84,7 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
     if (opts?.excludeChoices) {
       delete transformedResponse.choices;
     }
-    transformedResponse.created = new Date(responseData.created * 1000).toISOString();
+    transformedResponse.created = new Date(transformedResponse.created * 1000).toISOString();
 
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
