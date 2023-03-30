@@ -31,7 +31,7 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
       await axiom.ingestEvents(dataset!, {
         _time: start.toISOString(),
         type: "completion",
-        duration,
+        duration_ms: duration,
         request: transformedRequest,
         error: e.message,
       })
@@ -47,7 +47,7 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
       type: "completion",
-      duration,
+      duration_ms: duration,
       request: transformedRequest, 
       response: transformedResponse
     });
@@ -73,7 +73,7 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
       await axiom.ingestEvents(dataset!, {
         _time: start.toISOString(),
         type: "chatCompletion",
-        duration,
+        duration_ms: duration,
         request: transformedRequest,
         error: e.message,
       })
@@ -89,7 +89,7 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
       type: "chatCompletion",
-      duration,
+      duration_ms: duration,
       request: transformedRequest, 
       response: transformedResponse
     });
