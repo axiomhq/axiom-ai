@@ -28,6 +28,7 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
+    "@axiomhq/axiom-node": "^0.11.0",
     "openai": "^3.2.1"
   }
 }
