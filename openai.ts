@@ -16,9 +16,27 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
   const createCompletion = openai.createCompletion;
   openai.createCompletion = async (request: CreateCompletionRequest, options?: AxiosRequestConfig) => {
     const start = new Date();
-    // TODO: Capture exceptions
-    const response = await createCompletion.apply(openai, [request, options]);
-    const duration = new Date().getTime() - start.getTime();
+
+    const mappedRequest = request as any;
+    if (opts?.excludePromptOrMessages) {
+      delete mappedRequest.messages;
+    }
+
+    let response = null;
+    let duration = null;
+    try {
+      response = await createCompletion.apply(openai, [request, options]);
+      duration = new Date().getTime() - start.getTime();
+    } catch (e: any) {
+      await axiom.ingestEvents(dataset!, {
+        _time: start.toISOString(),
+        type: "completion",
+        duration,
+        request: mappedRequest,
+        error: e.message,
+      })
+      throw e;
+    }
 
     if (opts?.excludePromptOrMessages) {
       delete request.prompt;
@@ -30,8 +48,9 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
 
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
+      type: "completion",
       duration,
-      request, 
+      request: mappedRequest, 
       response: responseData
     });
 
@@ -41,14 +60,28 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
   const createChatCompletion = openai.createChatCompletion;
   openai.createChatCompletion = async (request: CreateChatCompletionRequest, options?: AxiosRequestConfig) => {
     const start = new Date();
-    // TODO: Capture exceptions
-    const response = await createChatCompletion.apply(openai, [request, options]);
-    const duration = new Date().getTime() - start.getTime();
 
-    const anyRequest = request as any;
+    const mappedRequest = request as any;
     if (opts?.excludePromptOrMessages) {
-      delete anyRequest.messages;
+      delete mappedRequest.messages;
     }
+
+    let response = null;
+    let duration = null;
+    try {
+      response = await createChatCompletion.apply(openai, [request, options]);
+      duration = new Date().getTime() - start.getTime();
+    } catch (e: any) {
+      await axiom.ingestEvents(dataset!, {
+        _time: start.toISOString(),
+        type: "chatCompletion",
+        duration,
+        request: mappedRequest,
+        error: e.message,
+      })
+      throw e;
+    }
+
     const responseData = response.data as any;
     if (opts?.excludeChoices) {
       delete responseData.choices;
@@ -56,8 +89,9 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
 
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
+      type: "chatCompletion",
       duration,
-      request: anyRequest, 
+      request: mappedRequest, 
       response: responseData
     });
 
