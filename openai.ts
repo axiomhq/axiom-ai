@@ -11,7 +11,7 @@ export interface WithAxiomOptions {
 
 export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi {
   const axiom = new Client({ token: opts?.token });
-  const dataset  = opts?.dataset || process.env.AXIOM_DATASET;
+  const dataset = opts?.dataset || process.env.AXIOM_DATASET;
 
   const createCompletion = openai.createCompletion;
   openai.createCompletion = async (request: CreateCompletionRequest, options?: AxiosRequestConfig) => {
@@ -23,16 +23,16 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
     if (opts?.excludePromptOrMessages) {
       delete request.prompt;
     }
-    // FIXME: Figure out how to get rid of choices
+    // FIXME: Figure out how to delete the choices
     // if (opts?.excludeChoices) {
-    //   delete response.choices;
+    //   delete response.data.choices;
     // }
 
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
       duration,
       request, 
-      response 
+      response: response.data
     });
 
     return response;
@@ -49,16 +49,16 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
     if (opts?.excludePromptOrMessages) {
       delete anyRequest.messages;
     }
-    // FIXME: Figure out how to get rid of choices
+    // FIXME: Figure out how to delete the choices
     // if (opts?.excludeChoices) {
-    //   delete response.choices;
+    //   delete response.data.choices;
     // }
 
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
       duration,
       request: anyRequest, 
-      response 
+      response: response.data
     });
 
     return response;
