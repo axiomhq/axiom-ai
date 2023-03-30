@@ -17,9 +17,9 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
   openai.createCompletion = async (request: CreateCompletionRequest, options?: AxiosRequestConfig) => {
     const start = new Date();
 
-    const mappedRequest = structuredClone(request) as any;
+    const transformedRequest = structuredClone(request) as any;
     if (opts?.excludePromptOrMessages) {
-      delete mappedRequest.prompt;
+      delete transformedRequest.prompt;
     }
 
     let response = null;
@@ -32,24 +32,24 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
         _time: start.toISOString(),
         type: "completion",
         duration,
-        request: mappedRequest,
+        request: transformedRequest,
         error: e.message,
       })
       throw e;
     }
 
-    const responseData = structuredClone(response.data) as any;
+    const transformedResponse = structuredClone(response.data) as any;
     if (opts?.excludeChoices) {
-      delete responseData.choices;
+      delete transformedResponse.choices;
     }
-    responseData.created = new Date(responseData.created * 1000).toISOString();
+    transformedResponse.created = new Date(responseData.created * 1000).toISOString();
 
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
       type: "completion",
       duration,
-      request: mappedRequest, 
-      response: responseData
+      request: transformedRequest, 
+      response: transformedResponse
     });
 
     return response;
@@ -59,9 +59,9 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
   openai.createChatCompletion = async (request: CreateChatCompletionRequest, options?: AxiosRequestConfig) => {
     const start = new Date();
 
-    const mappedRequest = structuredClone(request) as any;
+    const transformedRequest = structuredClone(request) as any;
     if (opts?.excludePromptOrMessages) {
-      delete mappedRequest.messages;
+      delete transformedRequest.messages;
     }
 
     let response = null;
@@ -74,24 +74,24 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
         _time: start.toISOString(),
         type: "chatCompletion",
         duration,
-        request: mappedRequest,
+        request: transformedRequest,
         error: e.message,
       })
       throw e;
     }
 
-    const responseData = structuredClone(response.data) as any;
+    const transformedResponse = structuredClone(response.data) as any;
     if (opts?.excludeChoices) {
-      delete responseData.choices;
+      delete transformedResponse.choices;
     }
-    responseData.created = new Date(responseData.created * 1000).toISOString();
+    transformedResponse.created = new Date(responseData.created * 1000).toISOString();
 
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
       type: "chatCompletion",
       duration,
-      request: mappedRequest, 
-      response: responseData
+      request: transformedRequest, 
+      response: transformedResponse
     });
 
     return response;
