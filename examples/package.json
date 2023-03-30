@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "axiom-ai": "file:../",
+    "dotenv": "^16.0.3",
     "openai": "^3.2.1",
     "ts-node": "^10.9.1"
   },
