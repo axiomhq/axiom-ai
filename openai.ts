@@ -16,7 +16,8 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
   const createCompletion = openai.createCompletion;
   openai.createCompletion = async (request: CreateCompletionRequest, options?: AxiosRequestConfig) => {
     const start = new Date();
-    const response = await createCompletion(request);
+    // TODO: Capture exceptions
+    const response = await createCompletion.apply(openai, [request, options]);
     const duration = new Date().getTime() - start.getTime();
 
     if (opts?.excludePromptOrMessages) {
@@ -40,7 +41,8 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
   const createChatCompletion = openai.createChatCompletion;
   openai.createChatCompletion = async (request: CreateChatCompletionRequest, options?: AxiosRequestConfig) => {
     const start = new Date();
-    const response = await createChatCompletion(request);
+    // TODO: Capture exceptions
+    const response = await createChatCompletion.apply(openai, [request, options]);
     const duration = new Date().getTime() - start.getTime();
 
     const anyRequest = request as any;
