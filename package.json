@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "The official package to send events from AI libraries to Axiom.",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "repository": {
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/axiomhq/axiom-ai#readme",
   "devDependencies": {
+    "@types/node": "^18.15.11",
     "typescript": "^5.0.2"
   },
   "peerDependencies": {
