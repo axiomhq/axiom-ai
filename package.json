@@ -1,0 +1,31 @@
+{
+  "name": "axiom-ai",
+  "version": "1.0.0",
+  "description": "The official package to send events from AI libraries to Axiom.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axiomhq/axiom-ai.git"
+  },
+  "keywords": [
+    "axiom",
+    "ai",
+    "observability",
+    "o11y"
+  ],
+  "author": "Axiom, Inc.",
+  "contributors": [
+    "Arne Bahlo <arne@axiom.co>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/axiomhq/axiom-ai/issues"
+  },
+  "homepage": "https://github.com/axiomhq/axiom-ai#readme",
+  "devDependencies": {
+    "typescript": "^5.0.2"
+  }
+}
