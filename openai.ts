@@ -22,9 +22,10 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
     if (opts?.excludePromptOrMessages) {
       delete request.prompt;
     }
-    if (opts?.excludeChoices) {
-      delete response.choices;
-    }
+    // FIXME: Figure out how to get rid of choices
+    // if (opts?.excludeChoices) {
+    //   delete response.choices;
+    // }
 
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
@@ -46,9 +47,10 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
     if (opts?.excludePromptOrMessages) {
       delete anyRequest.messages;
     }
-    if (opts?.excludeChoices) {
-      delete response.choices;
-    }
+    // FIXME: Figure out how to get rid of choices
+    // if (opts?.excludeChoices) {
+    //   delete response.choices;
+    // }
 
     await axiom.ingestEvents(dataset!, { 
       _time: start.toISOString(),
