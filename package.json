@@ -1,6 +1,6 @@
 {
   "name": "axiom-ai",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "The official package to send events from AI libraries to Axiom.",
   "scripts": {
     "build": "tsc",
