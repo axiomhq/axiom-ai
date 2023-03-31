@@ -9,12 +9,12 @@ export interface WithAxiomOptions {
   excludeChoices?: boolean;
 }
 
-export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi {
+export function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi {
   const axiom = new Client({ token: opts?.token });
   const dataset = opts?.dataset || process.env.AXIOM_DATASET;
 
   const createCompletion = openai.createCompletion;
-  openai.createCompletion = async (request: CreateCompletionRequest, options?: AxiosRequestConfig) => {
+  openai.createCompletion = async (request: CreateCompletionRequest, options?: AxiosRequestConfig<any>) => {
     const start = new Date();
 
     const transformedRequest = structuredClone(request) as any;
@@ -99,4 +99,3 @@ export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): O
 
   return openai;
 }
-

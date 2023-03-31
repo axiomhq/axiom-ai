@@ -24,7 +24,7 @@ chat completion calls to Axiom:
 
 ```typescript
 import { Configuration, OpenAIApi } from "openai";
-import withAxiom from "axiom-ai/openai";
+import { withAxiom } from "axiom-ai/openai";
 
 (async function() {
   const configuration = new Configuration({

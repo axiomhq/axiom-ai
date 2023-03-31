@@ -7,9 +7,6 @@
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
-  "exports": {
-    "./openai": "./dist/openai.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/axiomhq/axiom-ai.git"
@@ -38,5 +35,11 @@
   },
   "dependencies": {
     "@axiomhq/axiom-node": "^0.11.0"
+  },
+  "exports": {
+    "./openai": {
+      "require": "./dist/openai.js",
+      "import": "./dist/openai.js"
+    }
   }
 }
