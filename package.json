@@ -36,6 +36,7 @@
   "dependencies": {
     "@axiomhq/axiom-node": "^0.11.0"
   },
+  "type": "module",
   "exports": {
     "./openai": {
       "require": "./dist/openai.js",

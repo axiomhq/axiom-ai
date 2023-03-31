@@ -9,7 +9,7 @@ export interface WithAxiomOptions {
   excludeChoices?: boolean;
 }
 
-export function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi {
+export default function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi {
   const axiom = new Client({ token: opts?.token });
   const dataset = opts?.dataset || process.env.AXIOM_DATASET;
 
