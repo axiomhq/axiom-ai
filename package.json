@@ -7,8 +7,9 @@
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
-  "main": "dist/openai.js",
-  "types": "dist/openai.d.ts",
+  "exports": {
+    "./openai": "./dist/openai.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/axiomhq/axiom-ai.git"
