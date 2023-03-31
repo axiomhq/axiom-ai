@@ -1,5 +1,5 @@
-![axiom-ai: The official package to send events from AI libraries to Axiom](.github/images/banner-dark.svg#gh-dark-mode-only)
-![axiom-ai: The official package to send events from AI libraries to Axiom](.github/images/banner-light.svg#gh-light-mode-only)
+![axiom-ai: The official package to send events from AI libraries to Axiom](https://user-images.githubusercontent.com/163243/229035544-e4f5a8b2-eb65-4ef0-a17f-393072dc84c5.svg#gh-dark-mode-only)
+![axiom-ai: The official package to send events from AI libraries to Axiom](https://user-images.githubusercontent.com/163243/229035583-e97a467c-6f80-4826-8424-2337bd0f66b7.svg#gh-light-mode-only)
 
 [Axiom](https://axiom.co) unlocks observability at any scale.
 
