@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import { Configuration, OpenAIApi } from "openai";
-import withAxiom from "axiom-ai/openai";
+import { withAxiom } from "axiom-ai/openai";
 
 (async function() {
   dotenv.config()
