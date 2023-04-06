@@ -1,6 +1,6 @@
 import { OpenAIApi, CreateCompletionRequest, CreateChatCompletionRequest } from "openai";
 import { AxiosRequestConfig } from "axios";
-import Client from "@axiomhq/axiom-node";
+import BatchedAxiomClient from './shared';
 
 export interface WithAxiomOptions {
   token?: string;
@@ -9,9 +9,9 @@ export interface WithAxiomOptions {
   excludeChoices?: boolean;
 }
 
-export function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi {
-  const axiom = new Client({ token: opts?.token });
+export function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): { openai: OpenAIApi, flush: Function } {
   const dataset = opts?.dataset || process.env.AXIOM_DATASET;
+  const axiom = new BatchedAxiomClient(opts?.token, dataset!);
 
   const createCompletion = openai.createCompletion;
   openai.createCompletion = async (request: CreateCompletionRequest, options?: AxiosRequestConfig<any>) => {
@@ -28,7 +28,7 @@ export function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi
       response = await createCompletion.apply(openai, [request, options]);
       duration = new Date().getTime() - start.getTime();
     } catch (e: any) {
-      await axiom.ingestEvents(dataset!, {
+      await axiom.ingestEvents({
         _time: start.toISOString(),
         type: "completion",
         duration_ms: duration,
@@ -44,7 +44,7 @@ export function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi
     }
     transformedResponse.created = new Date(transformedResponse.created * 1000).toISOString();
 
-    await axiom.ingestEvents(dataset!, { 
+    await axiom.ingestEvents({ 
       _time: start.toISOString(),
       type: "completion",
       duration_ms: duration,
@@ -70,7 +70,7 @@ export function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi
       response = await createChatCompletion.apply(openai, [request, options]);
       duration = new Date().getTime() - start.getTime();
     } catch (e: any) {
-      await axiom.ingestEvents(dataset!, {
+      await axiom.ingestEvents({
         _time: start.toISOString(),
         type: "chatCompletion",
         duration_ms: duration,
@@ -86,7 +86,7 @@ export function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi
     }
     transformedResponse.created = new Date(transformedResponse.created * 1000).toISOString();
 
-    await axiom.ingestEvents(dataset!, { 
+    await axiom.ingestEvents({ 
       _time: start.toISOString(),
       type: "chatCompletion",
       duration_ms: duration,
@@ -97,5 +97,6 @@ export function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): OpenAIApi
     return response;
   }
 
-  return openai;
+  return { openai, flush: axiom.flush.bind(axiom) };
 }
+
