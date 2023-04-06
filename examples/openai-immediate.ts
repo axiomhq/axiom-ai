@@ -8,11 +8,7 @@ import { withAxiom } from "axiom-ai/openai";
   const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
   });
-  const { openai, flush } = withAxiom(new OpenAIApi(configuration));
-  process.on("beforeExit", async () => {
-    await flush()
-    process.exit(0);
-  });
+  const { openai } = withAxiom(new OpenAIApi(configuration), { sendType: "immediate" });
 
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
