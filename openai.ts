@@ -1,17 +1,24 @@
 import { OpenAIApi, CreateCompletionRequest, CreateChatCompletionRequest } from "openai";
 import { AxiosRequestConfig } from "axios";
-import BatchedAxiomClient from './shared';
+import { AxiomClient, BatchedAxiomClient, ImmediateAxiomClient } from './shared';
 
 export interface WithAxiomOptions {
   token?: string;
   dataset?: string;
   excludePromptOrMessages?: boolean;
   excludeChoices?: boolean;
+  sendType?: "batch"|"immediate";
 }
 
 export function withAxiom(openai: OpenAIApi, opts?: WithAxiomOptions): { openai: OpenAIApi, flush: Function } {
   const dataset = opts?.dataset || process.env.AXIOM_DATASET;
-  const axiom = new BatchedAxiomClient(opts?.token, dataset!);
+
+  let axiom: AxiomClient;
+  if (opts?.sendType === "immediate") {
+    axiom = new ImmediateAxiomClient(opts?.token, dataset!);
+  } else {
+    axiom = new BatchedAxiomClient(opts?.token, dataset!);
+  }
 
   const createCompletion = openai.createCompletion;
   openai.createCompletion = async (request: CreateCompletionRequest, options?: AxiosRequestConfig<any>) => {

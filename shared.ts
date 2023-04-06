@@ -21,10 +21,33 @@ function throttle(fn: Function, wait: number) {
   };
 }
 
+export interface AxiomClient {
+  ingestEvents(events: Array<object> | object): Promise<void>
+  flush(): Promise<void>
+}
+
+export class ImmediateAxiomClient implements AxiomClient {
+  private readonly client: Client;
+  private readonly dataset: string;
+
+  constructor(token: string | undefined, dataset: string) {
+    this.client = new Client({ token });
+    this.dataset = dataset;
+  }
+
+  public async ingestEvents(events: Array<object> | object) {
+    await this.client.ingestEvents(this.dataset, events);
+  }
+
+  public async flush() {
+    // No-op
+  }
+}
+
 const FLUSH_INTERVAL = 1000;
 const FLUSH_SIZE = 1000;
 
-export default class BatchedAxiomClient {
+export class BatchedAxiomClient implements AxiomClient {
   private readonly client: Client;
   private readonly dataset: string;
   private batch: object[];

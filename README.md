@@ -33,9 +33,18 @@ import { withAxiom } from "axiom-ai/openai";
   const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
   });
-  const openai = withAxiom(new OpenAIApi(configuration), {
+  const { openai, flush } = withAxiom(new OpenAIApi(configuration), {
     token: process.env.AXIOM_TOKEN,
     dataset: process.env.AXIOM_DATASET,
+    // excludePromptOrMessages: false,
+    // excludeChoices: false,
+    // sendType: "batch", // or "immediate" for sending events synchronously
+  });
+
+  // We need to flush events before exit
+  process.on("beforeExit", async () => {
+    await flush()
+    process.exit(0);
   });
 
   const completion = await openai.createCompletion({
@@ -77,7 +86,3 @@ This is what an event could look like.
   "type": "completion"
 }
 ```
-
-If you pass `excludePromptOrMessages: true` and/or `excludeChoices: true` to 
-the `withAxiom` options it won't send the prompt/messages or choices, 
-respectively.
