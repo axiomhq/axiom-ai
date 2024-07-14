@@ -1,8 +1,14 @@
+# axiom-ai
+
+<a href="https://axiom.co">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/163243/229035544-e4f5a8b2-eb65-4ef0-a17f-393072dc84c5.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/163243/229035583-e97a467c-6f80-4826-8424-2337bd0f66b7.svg">
-  <img alt="axiom-ai: The official package to send events from AI libraries to Axiom" src="https://user-images.githubusercontent.com/163243/229035583-e97a467c-6f80-4826-8424-2337bd0f66b7.svg">
+  <source media="(prefers-color-scheme: dark) and (min-width: 600px)" srcset="https://axiom.co/assets/github/axiom-github-banner-light-vertical.svg">
+  <source media="(prefers-color-scheme: light) and (min-width: 600px)" srcset="https://axiom.co/assets/github/axiom-github-banner-dark-vertical.svg">
+  <source media="(prefers-color-scheme: dark) and (max-width: 599px)" srcset="https://axiom.co/assets/github/axiom-github-banner-light-horizontal.svg">
+  <img alt="Axiom.co banner" src="https://axiom.co/assets/github/axiom-github-banner-dark-horizontal.svg" align="right">
 </picture>
+</a>
+&nbsp;
 
 [Axiom](https://axiom.co) unlocks observability at any scale.
 
