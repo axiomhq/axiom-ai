@@ -1,5 +1,8 @@
 # axiom-ai
 
+> [!IMPORTANT]
+> This repository is archived and the `axiom-ai` npm package is deprecated. To send events to Axiom, use [`@axiomhq/js`](https://github.com/axiomhq/axiom-js).
+
 <a href="https://axiom.co">
 <picture>
   <source media="(prefers-color-scheme: dark) and (min-width: 600px)" srcset="https://axiom.co/assets/github/axiom-github-banner-light-vertical.svg">
